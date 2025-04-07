@@ -901,12 +901,10 @@ Test Suite '${projectName}Tests' passed at 2023-05-30 10:15:32.145.
             if (result) {
                 addNewLine(result);
             }
-            
-            // Add new command line
-            addNewLine(`$ <span class="command-span"></span><span id="cursor" class="cursor">_</span>`);
-            commandSpan = document.querySelector('.command-span');
+            // Keep old line
+            commandSpan.textContent = '';
             currentCommand = '';
-        }
+            }
         
         // Add new line to output
         function addNewLine(text) {
