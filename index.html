@@ -26,6 +26,11 @@
     </div>
 
     <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
         @keyframes blink {
             0%, 49% { opacity: 1; }
             50%, 100% { opacity: 0; }
@@ -42,18 +47,18 @@
             position: relative;
         }
         
-#terminal {
-    height: 100%;
-    width: 100%;
-    background-color: #000;
-    color: #0f0;
-    font-family: monospace;
-    padding: 10px;
-    overflow-y: auto;
-    white-space: pre-wrap;
-    margin: 0; /* Add this */
-    box-sizing: border-box; /* Add this */
-}
+        #terminal {
+            height: 100%;
+            width: 100%;
+            background-color: #000;
+            color: #fff;
+            font-family: monospace;
+            padding: 10px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            margin: 0; /* Add this */
+            box-sizing: border-box; /* Add this */
+        }
         
         .command-line {
             display: flex;
