@@ -12,7 +12,7 @@
             <div style="color: #7F7F7F;">Apple, Xcode, and other trademarks are trademarks of Apple Inc., registered in the U.S. and other countries. This project is not affiliated with or endorsed by Apple. Copyright (c) 2025 Loud Monkey Designs. All rights reserved.</div>
             <div style="color: #7F7F7F;">xcrun version 64 (64).</div>
             <div style="color: #7F7F7F;">Type 'help' for a list of commands.</div>
-            <div style="margin-top: 10px">$ <span class="command-span"></span><span id="cursor" style="background-color: #FFFFFF; color: #000000; animation: blink 1s infinite;">_</span></div>
+            <div style="margin-top: 10px">$ <span class="command-span"></span><span id="cursor" class="cursor">_</span></div>
         </div>
     </div>
 
@@ -20,6 +20,30 @@
         @keyframes blink {
             0%, 49% { opacity: 1; }
             50%, 100% { opacity: 0; }
+        }
+        
+        .cursor {
+            background-color: #FFFFFF;
+            color: #000000;
+            animation: blink 1s infinite;
+            display: inline-block;
+            width: 8px;
+            height: 18px;
+            margin-bottom: -4px;
+            position: relative;
+        }
+        
+        #terminal {
+            white-space: pre-wrap;
+            line-height: 1.3;
+        }
+        
+        .command-line {
+            display: flex;
+        }
+        
+        .output-line {
+            padding: 2px 0;
         }
     </style>
 
@@ -61,6 +85,164 @@
             'Multi-platform/App',
             'Multi-platform/Framework'
         ];
+        
+        // Template implementations - actual code for different templates
+        const templateImplementations = {
+            'macOS/App': {
+                files: [
+                    {
+                        path: 'AppDelegate.swift',
+                        content: `import Cocoa
+
+@main
+class AppDelegate: NSObject, NSApplicationDelegate {
+    @IBOutlet var window: NSWindow!
+
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        // Insert code here to initialize your application
+    }
+
+    func applicationWillTerminate(_ notification: Notification) {
+        // Insert code here to tear down your application
+    }
+
+    func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
+        return true
+    }
+}
+`
+                    },
+                    {
+                        path: 'ContentView.swift',
+                        content: `import SwiftUI
+
+struct ContentView: View {
+    var body: some View {
+        VStack {
+            Image(systemName: "globe")
+                .imageScale(.large)
+                .foregroundStyle(.tint)
+            Text("Hello, world!")
+        }
+        .padding()
+    }
+}
+
+#Preview {
+    ContentView()
+}
+`
+                    },
+                    {
+                        path: 'Info.plist',
+                        content: `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>$(DEVELOPMENT_LANGUAGE)</string>
+    <key>CFBundleExecutable</key>
+    <string>$(EXECUTABLE_NAME)</string>
+    <key>CFBundleIdentifier</key>
+    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+    <key>NSPrincipalClass</key>
+    <string>NSApplication</string>
+</dict>
+</plist>
+`
+                    }
+                ]
+            },
+            'iOS/App': {
+                files: [
+                    {
+                        path: 'AppDelegate.swift',
+                        content: `import UIKit
+
+@main
+class AppDelegate: UIResponder, UIApplicationDelegate {
+    var window: UIWindow?
+
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        // Override point for customization after application launch.
+        return true
+    }
+}
+`
+                    },
+                    {
+                        path: 'ContentView.swift',
+                        content: `import SwiftUI
+
+struct ContentView: View {
+    var body: some View {
+        VStack {
+            Image(systemName: "heart.fill")
+                .imageScale(.large)
+                .foregroundStyle(.red)
+            Text("Hello, iOS!")
+        }
+        .padding()
+    }
+}
+
+#Preview {
+    ContentView()
+}
+`
+                    },
+                    {
+                        path: 'SceneDelegate.swift',
+                        content: `import UIKit
+import SwiftUI
+
+class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+    var window: UIWindow?
+
+    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        let contentView = ContentView()
+        
+        if let windowScene = scene as? UIWindowScene {
+            let window = UIWindow(windowScene: windowScene)
+            window.rootViewController = UIHostingController(rootView: contentView)
+            self.window = window
+            window.makeKeyAndVisible()
+        }
+    }
+}
+`
+                    }
+                ]
+            },
+            'macOS/Command Line Tool': {
+                files: [
+                    {
+                        path: 'main.swift',
+                        content: `// Command Line Tool
+import Foundation
+
+print("Hello, World!")
+
+func greet(person: String) -> String {
+    let greeting = "Hello, " + person + "!"
+    return greeting
+}
+
+// Test the function
+let message = greet(person: "Xcode User")
+print(message)
+
+// Process command line arguments
+let arguments = CommandLine.arguments
+if arguments.count > 1 {
+    let name = arguments[1]
+    print(greet(person: name))
+}
+`
+                    }
+                ]
+            }
+        };
 
         // Command implementations
         const commands = {
@@ -72,6 +254,7 @@ Available commands:
   pwd                             - Print working directory
   mkdir [directory]               - Create a directory
   rm [-r] [file/directory]        - Remove file or directory
+  cat [file]                      - Display file contents
   xcode-select --version          - Display Xcode command line tools version
   xcode-select --print-path       - Print developer directory path
   swift --version                 - Display Swift version
@@ -322,34 +505,32 @@ DriverKit SDKs:
                 // Create project files based on template
                 const projDir = getFileSystemObject(projectPath);
                 
-                if (template === 'macOS/Command Line Tool') {
-                    projDir.contents[`${projectName}.xcodeproj`] = { type: 'file', content: `Xcode project for ${projectName}` };
-                    createDirectory(`${projectPath}/Sources`);
-                    createDirectory(`${projectPath}/Tests`);
-                    
-                    const sourcesDir = getFileSystemObject(`${projectPath}/Sources`);
-                    sourcesDir.contents['main.swift'] = { 
+                // Create project structure based on template
+                projDir.contents[`${projectName}.xcodeproj`] = { type: 'file', content: `Xcode project for ${projectName} (${template})` };
+                
+                const templateImpl = templateImplementations[template] || templateImplementations['macOS/Command Line Tool'];
+                
+                // Create directories
+                createDirectory(`${projectPath}/Sources`);
+                if (template.includes('App')) {
+                    createDirectory(`${projectPath}/Resources`);
+                }
+                createDirectory(`${projectPath}/Tests`);
+                
+                // Create files based on template
+                const sourcesDir = getFileSystemObject(`${projectPath}/Sources`);
+                for (const file of templateImpl.files) {
+                    sourcesDir.contents[file.path] = { 
                         type: 'file', 
-                        content: `// ${projectName} - main.swift
-import Foundation
-
-print("Hello, World!")
-
-func greet(person: String) -> String {
-    let greeting = "Hello, " + person + "!"
-    return greeting
-}
-
-// Test the function
-let message = greet(person: "Xcode User")
-print(message)
-`
+                        content: file.content
                     };
-                    
-                    const testsDir = getFileSystemObject(`${projectPath}/Tests`);
-                    testsDir.contents[`${projectName}Tests.swift`] = { 
-                        type: 'file', 
-                        content: `// ${projectName}Tests - Unit Tests
+                }
+                
+                // Create test files
+                const testsDir = getFileSystemObject(`${projectPath}/Tests`);
+                testsDir.contents[`${projectName}Tests.swift`] = { 
+                    type: 'file', 
+                    content: `// ${projectName}Tests - Unit Tests
 import XCTest
 
 final class ${projectName}Tests: XCTestCase {
@@ -357,37 +538,22 @@ final class ${projectName}Tests: XCTestCase {
         // This is an example of a functional test case.
         XCTAssertEqual(1 + 1, 2)
     }
+
+    func testPerformanceExample() throws {
+        // This is an example of a performance test case.
+        measure {
+            // Put the code you want to measure the time of here.
+        }
+    }
 }
 `
-                    };
-                    
-                    createDirectory(`${projectPath}/.build`);
-                    projectCreated = true;
-                    currentProject = projectName;
-                    
-                    return `Created ${template} project: ${projectName}\nProject structure initialized at ${projectPath}\n\nUse 'cd ${projectName}' to navigate to the project directory.\nUse 'xcode-build ${projectName}' to build the project.`;
-                } else {
-                    // Basic structure for other templates
-                    projDir.contents[`${projectName}.xcodeproj`] = { type: 'file', content: `Xcode project for ${projectName} (${template})` };
-                    createDirectory(`${projectPath}/Sources`);
-                    createDirectory(`${projectPath}/Resources`);
-                    createDirectory(`${projectPath}/Tests`);
-                    
-                    const sourcesDir = getFileSystemObject(`${projectPath}/Sources`);
-                    
-                    if (template.includes('App')) {
-                        sourcesDir.contents['AppDelegate.swift'] = { type: 'file', content: `// AppDelegate for ${projectName}` };
-                        sourcesDir.contents['ContentView.swift'] = { type: 'file', content: `// Main view for ${projectName}` };
-                    } else {
-                        sourcesDir.contents[`${projectName}.swift`] = { type: 'file', content: `// Main implementation for ${projectName}` };
-                        sourcesDir.contents[`${projectName}.h`] = { type: 'file', content: `// Header for ${projectName}` };
-                    }
-                    
-                    projectCreated = true;
-                    currentProject = projectName;
-                    
-                    return `Created ${template} project: ${projectName}\nProject structure initialized at ${projectPath}\n\nUse 'cd ${projectName}' to navigate to the project directory.\nUse 'xcode-build ${projectName}' to build the project.`;
-                }
+                };
+                
+                createDirectory(`${projectPath}/.build`);
+                projectCreated = true;
+                currentProject = projectName;
+                
+                return `Created ${template} project: ${projectName}\nProject structure initialized at ${projectPath}\n\nUse 'cd ${projectName}' to navigate to the project directory.\nUse 'xcode-build ${projectName}' to build the project.`;
             },
             
             'xcode-build': function(args) {
@@ -434,7 +600,7 @@ Check dependencies
                     return 'xcodebuild: error: No project was specified and none could be found in the current working directory.';
                 }
                 
-                // Check if project exists
+                // Check if project exists and get template
                 const projectPath = `${currentDirectory}/${projectName}`;
                 const projectDirExists = getFileSystemObject(projectPath)?.type === 'directory';
                 const xcodeProjectExists = projectDirExists && getFileSystemObject(projectPath).contents[`${projectName}.xcodeproj`];
@@ -449,14 +615,34 @@ Check dependencies
                     return buildOutput;
                 }
                 
+                // Check project type to determine output
+                let outputText = '';
+                const sourcesDir = getFileSystemObject(`${projectPath}/Sources`);
+                
+                if (sourcesDir.contents['main.swift']) {
+                    // Command line tool output
+                    outputText = `Hello, World!\nHello, Xcode User!`;
+                } else if (sourcesDir.contents['AppDelegate.swift'] && sourcesDir.contents['ContentView.swift']) {
+                    // App output - simulated launch
+                    outputText = `
+Launching app '${projectName}.app'...
+App launched successfully.
+`;
+                } else {
+                    // Generic output
+                    outputText = `
+Running ${projectName}...
+Program completed successfully.
+`;
+                }
+                
                 // Run output simulation
                 return `
 ${buildOutput}
 
 === RUNNING ${projectName} ===
 
-Hello, World!
-Hello, Xcode User!
+${outputText}
 
 Program ended with exit code: 0
 `;
@@ -518,8 +704,10 @@ Clean.Remove clean build directory "/Users/user/Library/Developer/Xcode/DerivedD
 Test Suite '${projectName}Tests' started at 2023-05-30 10:15:32.123
 Test Case '-[${projectName}Tests testExample]' started.
 Test Case '-[${projectName}Tests testExample]' passed (0.001 seconds).
-Test Suite '${projectName}Tests' passed at 2023-05-30 10:15:32.125.
-     Executed 1 test, with 0 failures (0 unexpected) in 0.001 (0.002) seconds
+Test Case '-[${projectName}Tests testPerformanceExample]' started.
+Test Case '-[${projectName}Tests testPerformanceExample]' passed (0.015 seconds).
+Test Suite '${projectName}Tests' passed at 2023-05-30 10:15:32.145.
+     Executed 2 tests, with 0 failures (0 unexpected) in 0.016 (0.022) seconds
 
 ** TEST SUCCEEDED ** [0.135 sec]
 `;
@@ -546,7 +734,7 @@ Test Suite '${projectName}Tests' passed at 2023-05-30 10:15:32.125.
             
             'clear': function() {
                 output.innerHTML = '';
-                addNewLine(`$ <span class="command-span"></span><span id="cursor" style="background-color: #FFFFFF; color: #000000; animation: blink 1s infinite;">_</span>`);
+                addNewLine(`$ <span class="command-span"></span><span id="cursor" class="cursor">_</span>`);
                 commandSpan = document.querySelector('.command-span');
                 return null;  // Special case, don't add output
             },
@@ -563,16 +751,39 @@ Test Suite '${projectName}Tests' passed at 2023-05-30 10:15:32.125.
                     filePath = currentDirectory + '/' + args;
                 }
                 
-                const fsObj = getFileSystemObject(filePath);
-                if (!fsObj) {
-                    return `cat: ${args}: No such file or directory`;
+                // Parse the path to handle directory traversal
+                const pathParts = filePath.split('/').filter(Boolean);
+                let currentPath = '';
+                let currentObj = fileSystem;
+                
+                for (let i = 0; i < pathParts.length; i++) {
+                    const part = pathParts[i];
+                    
+                    if (i === 0) {
+                        currentPath = '/' + part;
+                    } else {
+                        currentPath += '/' + part;
+                    }
+                    
+                    // Navigate to next part
+                    if (i < pathParts.length - 1) {
+                        if (!currentObj[part] || currentObj[part].type !== 'directory') {
+                            return `cat: ${args}: No such file or directory`;
+                        }
+                        currentObj = currentObj[part].contents;
+                    } else {
+                        // Last part - should be a file
+                        if (!currentObj[part]) {
+                            return `cat: ${args}: No such file or directory`;
+                        } else if (currentObj[part].type === 'directory') {
+                            return `cat: ${args}: Is a directory`;
+                        } else {
+                            return `<pre style="white-space: pre-wrap;">${escapeHtml(currentObj[part].content)}</pre>`;
+                        }
+                    }
                 }
                 
-                if (fsObj.type === 'directory') {
-                    return `cat: ${args}: Is a directory`;
-                }
-                
-                return fsObj.content;
+                return `cat: ${args}: No such file or directory`;
             }
         };
 
@@ -580,33 +791,45 @@ Test Suite '${projectName}Tests' passed at 2023-05-30 10:15:32.125.
         function getFileSystemObject(path) {
             if (!path) return null;
             
-            const parts = path.split('/').filter(Boolean);
-            let current = fileSystem;
-            
+            // Handle root path
             if (path === '/') {
-                return fileSystem;
+                return { type: 'directory', contents: fileSystem };
             }
             
-            for (const part of parts) {
-                if (!current[part]) {
-                    return null;
-                }
-                current = current[part];
-            }
-            
-            return current;
-        }
-        
-        function createDirectory(path) {
             const parts = path.split('/').filter(Boolean);
             let current = fileSystem;
             
             for (let i = 0; i < parts.length; i++) {
                 const part = parts[i];
-                const subpath = '/' + parts.slice(0, i + 1).join('/');
                 
                 if (!current[part]) {
-                    // Create new directory
+                    return null;
+                }
+                
+                if (i === parts.length - 1) {
+                    return current[part];
+                }
+                
+                if (current[part].type !== 'directory') {
+                    return null;
+                }
+                
+                current = current[part].contents;
+            }
+            
+            return null;
+        }
+        
+        function createDirectory(path) {
+            if (!path) return;
+            
+            const parts = path.split('/').filter(Boolean);
+            let current = fileSystem;
+            
+            for (let i = 0; i < parts.length; i++) {
+                const part = parts[i];
+                
+                if (!current[part]) {
                     current[part] = {
                         type: 'directory',
                         contents: {}
@@ -615,6 +838,12 @@ Test Suite '${projectName}Tests' passed at 2023-05-30 10:15:32.125.
                 
                 current = current[part].contents;
             }
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
         
         // Initialize the file system with some directories
@@ -658,75 +887,148 @@ Test Suite '${projectName}Tests' passed at 2023-05-30 10:15:32.125.
             // Special case for clear
             if (result === null) {
                 return;
+}
+            
+            // Display result (add to output)
+            if (result) {
+                addNewLine(result);
             }
             
-            // Add output to terminal
-            addNewLine(result);
-            
             // Add new command line
-            addNewLine(`$ <span class="command-span"></span><span id="cursor" style="background-color: #FFFFFF; color: #000000; animation: blink 1s infinite;">_</span>`);
+            addNewLine(`$ <span class="command-span"></span><span id="cursor" class="cursor">_</span>`);
             commandSpan = document.querySelector('.command-span');
-            
-            // Scroll to bottom
-            terminal.scrollTop = terminal.scrollHeight;
+            currentCommand = '';
         }
         
-        function addNewLine(content) {
-            const line = document.createElement('div');
-            line.innerHTML = content;
-            output.appendChild(line);
+        // Add new line to output
+        function addNewLine(text) {
+            const div = document.createElement('div');
+            div.className = 'output-line';
+            div.innerHTML = text;
+            output.appendChild(div);
+            
+            // Scroll to bottom
+            setTimeout(() => {
+                terminal.scrollTop = terminal.scrollHeight;
+            }, 0);
         }
         
         // Handle keyboard input
         document.addEventListener('keydown', function(e) {
+            // Focus terminal on any key press
+            terminal.focus();
+            
             if (e.key === 'Enter') {
                 // Execute command
                 executeCommand(currentCommand);
-                currentCommand = '';
+                
             } else if (e.key === 'Backspace') {
-                // Remove last character
-                currentCommand = currentCommand.slice(0, -1);
-                commandSpan.textContent = currentCommand;
+                // Handle backspace
+                if (currentCommand.length > 0) {
+                    currentCommand = currentCommand.slice(0, -1);
+                    commandSpan.textContent = currentCommand;
+                }
+                
             } else if (e.key === 'ArrowUp') {
-                // Previous command in history
-                e.preventDefault();
+                // Navigate history up
                 if (historyIndex > 0) {
                     historyIndex--;
                     currentCommand = commandHistory[historyIndex];
                     commandSpan.textContent = currentCommand;
                 }
-            } else if (e.key === 'ArrowDown') {
-                // Next command in history
                 e.preventDefault();
+                
+            } else if (e.key === 'ArrowDown') {
+                // Navigate history down
                 if (historyIndex < commandHistory.length - 1) {
                     historyIndex++;
                     currentCommand = commandHistory[historyIndex];
-                } else {
+                    commandSpan.textContent = currentCommand;
+                } else if (historyIndex === commandHistory.length - 1) {
+                    historyIndex = commandHistory.length;
                     currentCommand = '';
+                    commandSpan.textContent = '';
                 }
-                commandSpan.textContent = currentCommand;
-            } else if (e.key === 'Tab') {
-                // Basic tab completion
                 e.preventDefault();
-                // Could implement path completion here
-            } else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
-                // Normal character input
+                
+            } else if (e.key === 'Tab') {
+                // Tab completion (simplified)
+                e.preventDefault();
+                
+                // Simple command completion
+                if (currentCommand.length > 0) {
+                    const commandParts = currentCommand.split(' ');
+                    const lastPart = commandParts[commandParts.length - 1];
+                    
+                    if (commandParts.length === 1) {
+                        // Command completion
+                        const possibleCommands = Object.keys(commands).filter(cmd => 
+                            cmd.startsWith(lastPart) && cmd !== lastPart
+                        );
+                        
+                        if (possibleCommands.length === 1) {
+                            currentCommand = possibleCommands[0];
+                            commandSpan.textContent = currentCommand;
+                        }
+                    } else if (currentCommand.startsWith('cd ') || currentCommand.startsWith('ls ')) {
+                        // Directory completion
+                        const dirPart = lastPart;
+                        const dirObj = getFileSystemObject(currentDirectory);
+                        
+                        if (dirObj && dirObj.type === 'directory') {
+                            const possibleDirs = Object.keys(dirObj.contents).filter(dir => 
+                                dir.startsWith(dirPart) && dir !== dirPart
+                            );
+                            
+                            if (possibleDirs.length === 1) {
+                                commandParts[commandParts.length - 1] = possibleDirs[0];
+                                currentCommand = commandParts.join(' ');
+                                commandSpan.textContent = currentCommand;
+                            }
+                        }
+                    }
+                }
+                
+            } else if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) {
+                // Regular character input
                 currentCommand += e.key;
                 commandSpan.textContent = currentCommand;
             }
             
-            // Scroll to current command
+            // Ensure cursor is visible by scrolling terminal
             terminal.scrollTop = terminal.scrollHeight;
         });
-
-        // Make sure clicks focus on the terminal
-        document.addEventListener('click', function() {
-            document.querySelector('#cursor').scrollIntoView();
+        
+        // Handle mouse clicks anywhere on terminal to focus input
+        terminal.addEventListener('click', function() {
+            // This prevents the actual cursor from showing by keeping focus on the terminal div
+            terminal.focus();
         });
-
-        // Initialize with focus
+        
+        // Allow copying text with mouse
+        terminal.addEventListener('mousemove', function(e) {
+            // Implement custom selection behavior if needed
+        });
+        
+        // Disable context menu (right click)
+        terminal.addEventListener('contextmenu', function(e) {
+            // Uncomment to prevent right click menu
+            // e.preventDefault();
+        });
+        
+        // Initialize terminal with some directories
         window.onload = function() {
-            document.querySelector('#cursor').scrollIntoView();
+            // Create Developer directory
+            commands['cd']('~');
+            commands['mkdir']('Developer');
+            commands['cd']('Developer');
+            
+            // Ensure cursor is blinking
+            const cursor = document.getElementById('cursor');
+            cursor.style.animation = 'blink 1s infinite';
+            
+            // Focus the terminal
+            terminal.focus();
         };
     </script>
 
