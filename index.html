@@ -17,7 +17,6 @@
     <style>
 	* {
   	  box-sizing: border-box;
-          text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
 	 }
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.95); }
@@ -57,18 +56,19 @@
         .output-line {
             padding: 2px 0;
   	    animation: slideUp 1s ease-out;
+            text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
         }
     </style>
 
 </head>
-<body style="margin: 0; padding: 0; font-family: 'Menlo', 'Monaco', monospace; background-color: #000000; color: #FFFFFF;">
-	    <div style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 2px rgba(0, 0, 0, 0.5); animation: slideDown 1s ease-out; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; z-index: 10000; position: sticky;margin: 0 auto; margin-bottom: 10px; width: 100%; background-color: #ffffff; color: #000000; top: 0px; padding: 10px;">$ <span class="command-span"></span><span id="cursor" class="cursor"></span></div>
-    <div id="terminal" style="margin-top: 0; padding: 10px; padding-top: 0px; box-sizing: border-box;">
-        <div id="output">
-            <div style="color: #7F7F7F;">xcrun: <i class="fa-solid fa-terminal"></i> Xcode Web Command Line Tools (CLT)</div>
-            <div style="color: #7F7F7F;">Apple, Xcode, and other trademarks are trademarks of Apple Inc., registered in the U.S. and other countries. This project is not affiliated with or endorsed by Apple. Copyright (c) 2025 Loud Monkey Designs. All rights reserved.</div>
-            <div style="color: #7F7F7F;">xcrun version 64 (64).</div>
-            <div style="color: #7F7F7F;">Type 'help' for a list of commands.</div>
+<body style="text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);margin: 0; padding: 0; font-family: 'Menlo', 'Monaco', monospace; background-color: #000000; color: #FFFFFF;">
+	    <div style="text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 2px rgba(0, 0, 0, 0.5); animation: slideDown 1s ease-out; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; z-index: 10000; position: sticky;margin: 0 auto; margin-bottom: 10px; width: 100%; background-color: #ffffff; color: #000000; top: 0px; padding: 10px;">$ <span class="command-span"></span><span id="cursor" class="cursor"></span></div>
+    <div id="terminal" style="text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);margin-top: 0; padding: 10px; padding-top: 0px; box-sizing: border-box;">
+        <div>
+            <div style="text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);color: #7F7F7F;">xcrun: <i class="fa-solid fa-terminal"></i> Xcode Web Command Line Tools (CLT)</div>
+            <div style="text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);color: #7F7F7F;">Apple, Xcode, and other trademarks are trademarks of Apple Inc., registered in the U.S. and other countries. This project is not affiliated with or endorsed by Apple. Copyright (c) 2025 Loud Monkey Designs. All rights reserved.</div>
+            <div style="text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);color: #7F7F7F;">xcrun version 64 (64).</div>
+            <div style="text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);color: #7F7F7F;">Type 'help' for a list of commands.</div>
         </div>
     </div>
 	
