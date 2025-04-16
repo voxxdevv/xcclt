@@ -55,6 +55,7 @@
 
 </head>
 <body style="overflow: hidden; margin: 0; padding: 0; font-family: 'Menlo', 'Monaco', monospace; background-color: #000000; color: #FFFFFF;">
+	<div style="width: 100%; position:fixed; background-color: #ffffff; color: #000000; top: 10px; padding: 10px; margin-bottom: 10px;">$ <span class="command-span"></span><span id="cursor" class="cursor">_</span></div>
     <div id="terminal" style="width: 100vw; height: 100vh; overflow: auto; padding: 10px; box-sizing: border-box;">
         <div id="output">
             <div style="color: #7F7F7F;">xcrun: Xcode Web Command Line Tools</div>
@@ -63,9 +64,7 @@
             <div style="color: #7F7F7F;">Type 'help' for a list of commands.</div>
         </div>
     </div>
-
-	<div style="background-color: #ffffff; color: #000000; margin-top: 10px; padding: 10px; margin-bottom: 10px;">$ <span class="command-span"></span><span id="cursor" class="cursor">_</span></div>
-
+	
     <script>
         // Terminal state
         const terminal = document.getElementById('terminal');
