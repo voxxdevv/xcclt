@@ -15,10 +15,10 @@
     <link rel="manifest" href="/ico/site.webmanifest">
 
     <style>
-	* {
-  	  box-sizing: border-box;
-     font-size: 1rem;
-	 }
+        * {
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.95); }
             to { opacity: 1; transform: scale(1); }
@@ -28,13 +28,13 @@
             50%, 100% { opacity: 0; }
         }
         @keyframes slideUp {
-         from { opacity: 0; transform: translateY(20px); }
- 	 to { opacity: 1; transform: translateY(0); }
-		}      
-	@keyframes slideDown {
-   	 from { opacity: 0; transform: translateY(-20px); }
-   	 to { opacity: 1; transform: translateY(0); }
-	}
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
         .cursor {
             background-color: #000000;
             color: #000000;
@@ -43,54 +43,48 @@
             width: 8px;
             height: 18px;
             margin-bottom: -4px;
-	    box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
         }
-        
         #terminal {
             line-height: 1.3;
-	    animation: fadeIn 1s ease-in-out; 
+            animation: fadeIn 1s ease-in-out;
             outline: none;
-	    width: 100%;
-	    height: 100%;
-         }
-        
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+        }
         .output-line {
             padding: 2px 0;
-  	    animation: slideUp 1s ease-out;
+            animation: slideUp 1s ease-out;
             text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
         }
-@media screen and (max-width: 768px) {
-    #mobile-keyboard-toggle {
-        display: block;
-
-    }
-    #terminal {
-        margin-bottom: 60px; /* Prevent content from being hidden by virtual keyboard */
-    }
-    #mobile-keyboard-toggle.active {
-        background-color: #3E9BFF;
-        color: #ffffff;
-    }
-}
+        @media screen and (max-width: 768px) {
+            #mobile-keyboard-toggle {
+                display: block;
+            }
+            #terminal {
+                margin-bottom: 60px;
+            }
+        }
     </style>
-
 </head>
-<body style="text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);margin: 0; padding: 0; font-family: 'Menlo', 'Monaco', monospace; background-color: #000000; color: #FFFFFF;">
-	    <div style="text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 2px rgba(0, 0, 0, 0.5); animation: slideDown 1s ease-out; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; z-index: 10000; position: sticky;margin: 0 auto; margin-bottom: 10px; width: 100%; background-color: #ffffff; color: #000000; top: 0px; padding: 10px;">$ <span class="command-span"></span><span id="cursor" class="cursor"></span></div>
-    <div id="terminal" style="text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);margin-top: 0; padding: 10px; padding-top: 0px; box-sizing: border-box;">
-        <div>
-            <div style="text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);color: #7F7F7F;">xcrun: <i class="fa-solid fa-terminal"></i> Xcode Web Command Line Tools (CLT)</div>
-            <div style="text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);color: #7F7F7F;">Apple, Xcode, and other trademarks are trademarks of Apple Inc., registered in the U.S. and other countries. This project is not affiliated with or endorsed by Apple. Copyright (c) 2025 Loud Monkey Designs. All rights reserved.</div>
-            <div style="text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);color: #7F7F7F;">xcrun version 64 (64).</div>
-            <div style="text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);color: #7F7F7F;">Type 'help' for a list of commands.</div>
+<body style="text-shadow: 0 0 2px rgba(0, 0, 0, 0.5); margin: 0; padding: 0; font-family: 'Menlo', 'Monaco', monospace; background-color: #000000; color: #FFFFFF;">
+    <div style="text-shadow: 0 0 2px rgba(0, 0, 0, 0.5); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 2px rgba(0, 0, 0, 0.5); animation: slideDown 1s ease-out; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; z-index: 10000; position: sticky; margin: 0 auto; margin-bottom: 10px; width: 100%; background-color: #ffffff; color: #000000; top: 0px; padding: 10px;">
+        $ <span class="command-span"></span><span id="cursor" class="cursor"></span>
+    </div>
+    <div id="terminal" style="text-shadow: 0 0 2px rgba(0, 0, 0, 0.5); margin-top: 0; padding: 10px; padding-top: 0px; box-sizing: border-box;">
+        <div id="output">
+            <div style="text-shadow: 0 0 2px rgba(0, 0, 0, 0.5); color: #7F7F7F;">xcrun: <i class="fa-solid fa-terminal"></i> Xcode Web Command Line Tools (CLT)</div>
+            <div style="text-shadow: 0 0 2px rgba(0, 0, 0, 0.5); color: #7F7F7F;">Apple, Xcode, and other trademarks are trademarks of Apple Inc., registered in the U.S. and other countries. This project is not affiliated with or endorsed by Apple. Copyright (c) 2025 Loud Monkey Designs. All rights reserved.</div>
+            <div style="text-shadow: 0 0 2px rgba(0, 0, 0, 0.5); color: #7F7F7F;">xcrun version 64 (64).</div>
+            <div style="text-shadow: 0 0 2px rgba(0, 0, 0, 0.5); color: #7F7F7F;">Type 'help' for a list of commands.</div>
         </div>
     </div>
-
-<div id="mobile-keyboard-toggle" style="animation: slideUp 1s ease-out; display: none; position: fixed; bottom: 0px; left: 0px; z-index: 10001; background-color: #ffffff; color: #000000;padding:10px;box-sizing: content-box; border-top-right-radius: 10px; box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); cursor: pointer;">
-    <i class="fa-solid fa-keyboard"></i>
-</div>
-<input type="text" id="mobile-input" style="position: fixed; bottom: -100px; opacity: 0; width: 1px; height: 1px;" />
-	
+    <div id="mobile-keyboard-toggle" style="animation: slideUp 1s ease-out; display: none; position: fixed; bottom: 0px; left: 0px; z-index: 10001; background-color: #ffffff; color: #000000; padding: 10px; box-sizing: content-box; border-top-right-radius: 10px; box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); cursor: pointer;">
+        <i class="fa-solid fa-keyboard"></i>
+    </div>
+    <input type="text" id="mobile-input" style="position: fixed; bottom: -100px; opacity: 0; width: 1px; height: 1px;" />
+    
     <script>
         // Terminal state
         const terminal = document.getElementById('terminal');
@@ -130,70 +124,21 @@
             'Multi-platform/Framework'
         ];
         
-        // Template implementations - actual code for different templates
+        // Template implementations
         const templateImplementations = {
             'macOS/App': {
                 files: [
                     {
                         path: 'AppDelegate.swift',
-                        content: `import Cocoa
-
-@main
-class AppDelegate: NSObject, NSApplicationDelegate {
-    @IBOutlet var window: NSWindow!
-
-    func applicationDidFinishLaunching(_ notification: Notification) {
-        // Insert code here to initialize your application
-    }
-
-    func applicationWillTerminate(_ notification: Notification) {
-        // Insert code here to tear down your application
-    }
-
-    func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
-        return true
-    }
-}
-`
+                        content: `import Cocoa\n\n@main\nclass AppDelegate: NSObject, NSApplicationDelegate {\n    @IBOutlet var window: NSWindow!\n\n    func applicationDidFinishLaunching(_ notification: Notification) {\n        // Insert code here to initialize your application\n    }\n\n    func applicationWillTerminate(_ notification: Notification) {\n        // Insert code here to tear down your application\n    }\n\n    func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {\n        return true\n    }\n}\n`
                     },
                     {
                         path: 'ContentView.swift',
-                        content: `import SwiftUI
-
-struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
-    }
-}
-
-#Preview {
-    ContentView()
-}
-`
+                        content: `import SwiftUI\n\nstruct ContentView: View {\n    var body: some View {\n        VStack {\n            Image(systemName: "globe")\n                .imageScale(.large)\n                .foregroundStyle(.tint)\n            Text("Hello, world!")\n        }\n        .padding()\n    }\n}\n\n#Preview {\n    ContentView()\n}\n`
                     },
                     {
                         path: 'Info.plist',
-                        content: `<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>CFBundleDevelopmentRegion</key>
-    <string>$(DEVELOPMENT_LANGUAGE)</string>
-    <key>CFBundleExecutable</key>
-    <string>$(EXECUTABLE_NAME)</string>
-    <key>CFBundleIdentifier</key>
-    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-    <key>NSPrincipalClass</key>
-    <string>NSApplication</string>
-</dict>
-</plist>
-`
+                        content: `<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n<plist version="1.0">\n<dict>\n    <key>CFBundleDevelopmentRegion</key>\n    <string>$(DEVELOPMENT_LANGUAGE)</string>\n    <key>CFBundleExecutable</key>\n    <string>$(EXECUTABLE_NAME)</string>\n    <key>CFBundleIdentifier</key>\n    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>\n    <key>NSPrincipalClass</key>\n    <string>NSApplication</string>\n</dict>\n</plist>\n`
                     }
                 ]
             },
@@ -201,60 +146,15 @@ struct ContentView: View {
                 files: [
                     {
                         path: 'AppDelegate.swift',
-                        content: `import UIKit
-
-@main
-class AppDelegate: UIResponder, UIApplicationDelegate {
-    var window: UIWindow?
-
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        return true
-    }
-}
-`
+                        content: `import UIKit\n\n@main\nclass AppDelegate: UIResponder, UIApplicationDelegate {\n    var window: UIWindow?\n\n    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {\n        // Override point for customization after application launch.\n        return true\n    }\n}\n`
                     },
                     {
                         path: 'ContentView.swift',
-                        content: `import SwiftUI
-
-struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "heart.fill")
-                .imageScale(.large)
-                .foregroundStyle(.red)
-            Text("Hello, iOS!")
-        }
-        .padding()
-    }
-}
-
-#Preview {
-    ContentView()
-}
-`
+                        content: `import SwiftUI\n\nstruct ContentView: View {\n    var body: some View {\n        VStack {\n            Image(systemName: "heart.fill")\n                .imageScale(.large)\n                .foregroundStyle(.red)\n            Text("Hello, iOS!")\n        }\n        .padding()\n    }\n}\n\n#Preview {\n    ContentView()\n}\n`
                     },
                     {
                         path: 'SceneDelegate.swift',
-                        content: `import UIKit
-import SwiftUI
-
-class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-    var window: UIWindow?
-
-    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        let contentView = ContentView()
-        
-        if let windowScene = scene as? UIWindowScene {
-            let window = UIWindow(windowScene: windowScene)
-            window.rootViewController = UIHostingController(rootView: contentView)
-            self.window = window
-            window.makeKeyAndVisible()
-        }
-    }
-}
-`
+                        content: `import UIKit\nimport SwiftUI\n\nclass SceneDelegate: UIResponder, UIWindowSceneDelegate {\n    var window: UIWindow?\n\n    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {\n        let contentView = ContentView()\n        \n        if let windowScene = scene as? UIWindowScene {\n            let window = UIWindow(windowScene: windowScene)\n            window.rootViewController = UIHostingController(rootView: contentView)\n            self.window = window\n            window.makeKeyAndVisible()\n        }\n    }\n}\n`
                     }
                 ]
             },
@@ -262,27 +162,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 files: [
                     {
                         path: 'main.swift',
-                        content: `// Command Line Tool
-import Foundation
-
-print("Hello, World!")
-
-func greet(person: String) -> String {
-    let greeting = "Hello, " + person + "!"
-    return greeting
-}
-
-// Test the function
-let message = greet(person: "Xcode User")
-print(message)
-
-// Process command line arguments
-let arguments = CommandLine.arguments
-if arguments.count > 1 {
-    let name = arguments[1]
-    print(greet(person: name))
-}
-`
+                        content: `// Command Line Tool\nimport Foundation\n\nprint("Hello, World!")\n\nfunc greet(person: String) -> String {\n    let greeting = "Hello, " + person + "!"\n    return greeting\n}\n\n// Test the function\nlet message = greet(person: "Xcode User")\nprint(message)\n\n// Process command line arguments\nlet arguments = CommandLine.arguments\nif arguments.count > 1 {\n    let name = arguments[1]\n    print(greet(person: name))\n}\n`
                     }
                 ]
             }
@@ -307,35 +187,23 @@ Available commands:
   xcodebuild -list                - List available schemes (in a project)
   xcodebuild -list -project [project] - List schemes in specified project
   xcodebuild -showsdks            - List available SDKs
-
-Project commands:
   xcode-create [name] [template]  - Create a new Xcode project
-                                     Use xcode-list-templates to see available templates
   xcode-list-templates            - List available project templates
   xcode-build [project]           - Build a project
   xcode-run [project]             - Build and run a project
   xcode-clean [project]           - Clean a project
   xcode-test [project]            - Run tests for a project
   xcode-open [project]            - Open a project in Xcode (simulated)
-  
   clear                           - Clear the terminal screen
                 `;
             },
-            
             'cd': function(args) {
                 if (!args || args === '~') {
                     currentDirectory = '/Users/user';
                     return '';
                 }
                 
-                let targetPath;
-                if (args.startsWith('/')) {
-                    targetPath = args;
-                } else {
-                    targetPath = currentDirectory + '/' + args;
-                }
-                
-                // Normalize path (handle '..' and '.')
+                let targetPath = args.startsWith('/') ? args : `${currentDirectory}/${args}`;
                 const parts = targetPath.split('/').filter(Boolean);
                 const resolvedParts = [];
                 for (const part of parts) {
@@ -347,7 +215,6 @@ Project commands:
                 }
                 targetPath = '/' + resolvedParts.join('/');
                 
-                // Check if directory exists
                 if (getFileSystemObject(targetPath)?.type === 'directory') {
                     currentDirectory = targetPath;
                     return '';
@@ -355,11 +222,9 @@ Project commands:
                     return `cd: ${args}: No such file or directory`;
                 }
             },
-            
             'pwd': function() {
                 return currentDirectory;
             },
-            
             'ls': function(args) {
                 const path = args || currentDirectory;
                 const fsObj = getFileSystemObject(path);
@@ -393,23 +258,15 @@ Project commands:
                 
                 return result.join('  ');
             },
-            
             'mkdir': function(args) {
                 if (!args) {
                     return 'mkdir: missing operand';
                 }
                 
-                let targetPath;
-                if (args.startsWith('/')) {
-                    targetPath = args;
-                } else {
-                    targetPath = currentDirectory + '/' + args;
-                }
-                
+                let targetPath = args.startsWith('/') ? args : `${currentDirectory}/${args}`;
                 createDirectory(targetPath);
                 return '';
             },
-            
             'rm': function(args) {
                 if (!args) {
                     return 'rm: missing operand';
@@ -417,17 +274,15 @@ Project commands:
                 
                 const parts = args.split(' ').filter(Boolean);
                 let recursive = false;
-                let targetPath;
+                let targetPath = parts[0];
                 
                 if (parts[0] === '-r' || parts[0] === '-rf') {
                     recursive = true;
                     targetPath = parts[1];
-                } else {
-                    targetPath = parts[0];
                 }
                 
                 if (!targetPath.startsWith('/')) {
-                    targetPath = currentDirectory + '/' + targetPath;
+                    targetPath = `${currentDirectory}/${targetPath}`;
                 }
                 
                 const fsObj = getFileSystemObject(targetPath);
@@ -439,7 +294,6 @@ Project commands:
                     return `rm: ${targetPath}: is a directory`;
                 }
                 
-                // Remove the file or directory
                 const parentPath = targetPath.substring(0, targetPath.lastIndexOf('/'));
                 const fileName = targetPath.substring(targetPath.lastIndexOf('/') + 1);
                 const parentDir = getFileSystemObject(parentPath);
@@ -451,27 +305,21 @@ Project commands:
                     return `rm: ${targetPath}: No such file or directory`;
                 }
             },
-            
             'xcode-select --version': function() {
                 return 'xcode-select version 2412.';
             },
-            
             'xcode-select --print-path': function() {
                 return '/Applications/Xcode.app/Contents/Developer';
             },
-            
             'swift --version': function() {
                 return 'Apple Swift version 5.8.1 (swiftlang-5.8.0.124.5 clang-1403.0.22.11.100)\nTarget: arm64-apple-macosx13.0';
             },
-            
             'xcrun --version': function() {
                 return 'xcrun version 64 (64).';
             },
-            
             'xcodebuild -version': function() {
                 return 'Xcode 14.3.1\nBuild version 14E300c';
             },
-            
             'xcodebuild -list': function() {
                 if (!projectCreated || !currentProject) {
                     return 'xcodebuild: error: No project was specified and none could be found in the current working directory.';
@@ -494,39 +342,29 @@ Information about project "${currentProject}":
         ${currentProject}
 `;
             },
-            
             'xcodebuild -showsdks': function() {
                 return `
 macOS SDKs:
     macOS 13.3                     -sdk macosx13.3
-
 iOS SDKs:
     iOS 16.4                       -sdk iphoneos16.4
-
 iOS Simulator SDKs:
     Simulator - iOS 16.4           -sdk iphonesimulator16.4
-
 tvOS SDKs:
     tvOS 16.4                      -sdk appletvos16.4
-
 tvOS Simulator SDKs:
     Simulator - tvOS 16.4          -sdk appletvsimulator16.4
-
 watchOS SDKs:
     watchOS 9.4                    -sdk watchos9.4
-
 watchOS Simulator SDKs:
     Simulator - watchOS 9.4        -sdk watchsimulator9.4
-
 DriverKit SDKs:
     DriverKit 22.4                 -sdk driverkit22.4
 `;
             },
-            
             'xcode-list-templates': function() {
                 return 'Available Xcode project templates:\n' + xcodeTemplates.join('\n');
             },
-            
             'xcode-create': function(args) {
                 if (!args) {
                     return 'Usage: xcode-create [project_name] [template]\nUse xcode-list-templates to see available templates.';
@@ -536,32 +374,25 @@ DriverKit SDKs:
                 const projectName = parts[0];
                 const templateArg = parts.slice(1).join(' ');
                 
-                // Check if template exists
                 const template = templateArg || 'macOS/Command Line Tool';
                 if (!xcodeTemplates.includes(template)) {
                     return `Template "${template}" not found. Use xcode-list-templates to see available templates.`;
                 }
                 
-                // Create project structure
                 const projectPath = `${currentDirectory}/${projectName}`;
                 createDirectory(projectPath);
                 
-                // Create project files based on template
                 const projDir = getFileSystemObject(projectPath);
-                
-                // Create project structure based on template
                 projDir.contents[`${projectName}.xcodeproj`] = { type: 'file', content: `Xcode project for ${projectName} (${template})` };
                 
                 const templateImpl = templateImplementations[template] || templateImplementations['macOS/Command Line Tool'];
                 
-                // Create directories
                 createDirectory(`${projectPath}/Sources`);
                 if (template.includes('App')) {
                     createDirectory(`${projectPath}/Resources`);
                 }
                 createDirectory(`${projectPath}/Tests`);
                 
-                // Create files based on template
                 const sourcesDir = getFileSystemObject(`${projectPath}/Sources`);
                 for (const file of templateImpl.files) {
                     sourcesDir.contents[file.path] = { 
@@ -570,27 +401,10 @@ DriverKit SDKs:
                     };
                 }
                 
-                // Create test files
                 const testsDir = getFileSystemObject(`${projectPath}/Tests`);
                 testsDir.contents[`${projectName}Tests.swift`] = { 
                     type: 'file', 
-                    content: `// ${projectName}Tests - Unit Tests
-import XCTest
-
-final class ${projectName}Tests: XCTestCase {
-    func testExample() throws {
-        // This is an example of a functional test case.
-        XCTAssertEqual(1 + 1, 2)
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-}
-`
+                    content: `// ${projectName}Tests - Unit Tests\nimport XCTest\n\nfinal class ${projectName}Tests: XCTestCase {\n    func testExample() throws {\n        // This is an example of a functional test case.\n        XCTAssertEqual(1 + 1, 2)\n    }\n\n    func testPerformanceExample() throws {\n        // This is an example of a performance test case.\n        measure {\n            // Put the code you want to measure the time of here.\n        }\n    }\n}\n`
                 };
                 
                 createDirectory(`${projectPath}/.build`);
@@ -599,7 +413,6 @@ final class ${projectName}Tests: XCTestCase {
                 
                 return `Created ${template} project: ${projectName}\nProject structure initialized at ${projectPath}\n\nUse 'cd ${projectName}' to navigate to the project directory.\nUse 'xcode-build ${projectName}' to build the project.`;
             },
-            
             'xcode-build': function(args) {
                 const projectName = args || currentProject;
                 
@@ -607,7 +420,6 @@ final class ${projectName}Tests: XCTestCase {
                     return 'xcodebuild: error: No project was specified and none could be found in the current working directory.';
                 }
                 
-                // Check if project exists
                 const projectPath = `${currentDirectory}/${projectName}`;
                 const projectDirExists = getFileSystemObject(projectPath)?.type === 'directory';
                 const xcodeProjectExists = projectDirExists && getFileSystemObject(projectPath).contents[`${projectName}.xcodeproj`];
@@ -616,12 +428,10 @@ final class ${projectName}Tests: XCTestCase {
                     return `xcodebuild: error: project '${projectName}' does not exist.`;
                 }
                 
-                // Build output simulation
                 buildSuccess = true;
                 
                 return `
 === BUILD TARGET ${projectName} OF PROJECT ${projectName} WITH CONFIGURATION Debug ===
-
 Check dependencies
     Swift Compiler - Language Submodule               0.01 seconds
     Swift Compiler - AST Parsing and Generation       0.10 seconds
@@ -632,11 +442,9 @@ Check dependencies
     Swift Compiler - SIL Processing                   0.01 seconds
     Swift Compiler - LLVM Generation                  0.03 seconds
     Linking and Creation                              0.07 seconds
-
 ** BUILD SUCCEEDED ** [0.366 sec]
 `;
             },
-            
             'xcode-run': function(args) {
                 const projectName = args || currentProject;
                 
@@ -644,7 +452,6 @@ Check dependencies
                     return 'xcodebuild: error: No project was specified and none could be found in the current working directory.';
                 }
                 
-                // Check if project exists and get template
                 const projectPath = `${currentDirectory}/${projectName}`;
                 const projectDirExists = getFileSystemObject(projectPath)?.type === 'directory';
                 const xcodeProjectExists = projectDirExists && getFileSystemObject(projectPath).contents[`${projectName}.xcodeproj`];
@@ -653,45 +460,35 @@ Check dependencies
                     return `xcodebuild: error: project '${projectName}' does not exist.`;
                 }
                 
-                // Build first
                 const buildOutput = commands['xcode-build'](projectName);
                 if (!buildSuccess) {
                     return buildOutput;
                 }
                 
-                // Check project type to determine output
                 let outputText = '';
                 const sourcesDir = getFileSystemObject(`${projectPath}/Sources`);
                 
                 if (sourcesDir.contents['main.swift']) {
-                    // Command line tool output
                     outputText = `Hello, World!\nHello, Xcode User!`;
                 } else if (sourcesDir.contents['AppDelegate.swift'] && sourcesDir.contents['ContentView.swift']) {
-                    // App output - simulated launch
                     outputText = `
 Launching app '${projectName}.app'...
 App launched successfully.
 `;
                 } else {
-                    // Generic output
                     outputText = `
 Running ${projectName}...
 Program completed successfully.
 `;
                 }
                 
-                // Run output simulation
                 return `
 ${buildOutput}
-
 === RUNNING ${projectName} ===
-
 ${outputText}
-
 Program ended with exit code: 0
 `;
             },
-            
             'xcode-clean': function(args) {
                 const projectName = args || currentProject;
                 
@@ -699,7 +496,6 @@ Program ended with exit code: 0
                     return 'xcodebuild: error: No project was specified and none could be found in the current working directory.';
                 }
                 
-                // Check if project exists
                 const projectPath = `${currentDirectory}/${projectName}`;
                 const projectDirExists = getFileSystemObject(projectPath)?.type === 'directory';
                 const xcodeProjectExists = projectDirExists && getFileSystemObject(projectPath).contents[`${projectName}.xcodeproj`];
@@ -708,23 +504,18 @@ Program ended with exit code: 0
                     return `xcodebuild: error: project '${projectName}' does not exist.`;
                 }
                 
-                // Clean output simulation
                 return `
 === CLEAN TARGET ${projectName} OF PROJECT ${projectName} WITH CONFIGURATION Debug ===
-
 Check dependencies
 Clean.Remove clean build directory "/Users/user/Library/Developer/Xcode/DerivedData/${projectName}-XXXXXXXX/Build/Products/Debug"
     cd ${projectPath}
     builtin-rm -rf /Users/user/Library/Developer/Xcode/DerivedData/${projectName}-XXXXXXXX/Build/Products/Debug
-
 Clean.Remove clean build directory "/Users/user/Library/Developer/Xcode/DerivedData/${projectName}-XXXXXXXX/Build/Intermediates.noindex"
     cd ${projectPath}
     builtin-rm -rf /Users/user/Library/Developer/Xcode/DerivedData/${projectName}-XXXXXXXX/Build/Intermediates.noindex
-
 ** CLEAN SUCCEEDED ** [0.124 sec]
 `;
             },
-            
             'xcode-test': function(args) {
                 const projectName = args || currentProject;
                 
@@ -732,7 +523,6 @@ Clean.Remove clean build directory "/Users/user/Library/Developer/Xcode/DerivedD
                     return 'xcodebuild: error: No project was specified and none could be found in the current working directory.';
                 }
                 
-                // Check if project exists
                 const projectPath = `${currentDirectory}/${projectName}`;
                 const projectDirExists = getFileSystemObject(projectPath)?.type === 'directory';
                 const xcodeProjectExists = projectDirExists && getFileSystemObject(projectPath).contents[`${projectName}.xcodeproj`];
@@ -741,10 +531,8 @@ Clean.Remove clean build directory "/Users/user/Library/Developer/Xcode/DerivedD
                     return `xcodebuild: error: project '${projectName}' does not exist.`;
                 }
                 
-                // Test output simulation
                 return `
 === TEST ${projectName}Tests OF PROJECT ${projectName} WITH CONFIGURATION Debug ===
-
 Test Suite '${projectName}Tests' started at 2023-05-30 10:15:32.123
 Test Case '-[${projectName}Tests testExample]' started.
 Test Case '-[${projectName}Tests testExample]' passed (0.001 seconds).
@@ -752,11 +540,9 @@ Test Case '-[${projectName}Tests testPerformanceExample]' started.
 Test Case '-[${projectName}Tests testPerformanceExample]' passed (0.015 seconds).
 Test Suite '${projectName}Tests' passed at 2023-05-30 10:15:32.145.
      Executed 2 tests, with 0 failures (0 unexpected) in 0.016 (0.022) seconds
-
 ** TEST SUCCEEDED ** [0.135 sec]
 `;
             },
-            
             'xcode-open': function(args) {
                 const projectName = args || currentProject;
                 
@@ -764,7 +550,6 @@ Test Suite '${projectName}Tests' passed at 2023-05-30 10:15:32.145.
                     return 'xcodebuild: error: No project was specified and none could be found in the current working directory.';
                 }
                 
-                // Check if project exists
                 const projectPath = `${currentDirectory}/${projectName}`;
                 const projectDirExists = getFileSystemObject(projectPath)?.type === 'directory';
                 const xcodeProjectExists = projectDirExists && getFileSystemObject(projectPath).contents[`${projectName}.xcodeproj`];
@@ -775,27 +560,19 @@ Test Suite '${projectName}Tests' passed at 2023-05-30 10:15:32.145.
                 
                 return `Opening project ${projectName}.xcodeproj in Xcode... (simulated)`;
             },
-            
             'clear': function() {
                 output.innerHTML = '';
-                addNewLine(`$ <span class="command-span"></span><span id="cursor" class="cursor">_</span>`);
-                commandSpan = document.querySelector('.command-span');
-                return null;  // Special case, don't add output
+                commandSpan.textContent = '';
+                currentCommand = '';
+                return null;
             },
-            
             'cat': function(args) {
                 if (!args) {
                     return 'cat: No file specified';
                 }
                 
-                let filePath;
-                if (args.startsWith('/')) {
-                    filePath = args;
-                } else {
-                    filePath = currentDirectory + '/' + args;
-                }
+                let filePath = args.startsWith('/') ? args : `${currentDirectory}/${args}`;
                 
-                // Parse the path to handle directory traversal
                 const pathParts = filePath.split('/').filter(Boolean);
                 let currentPath = '';
                 let currentObj = fileSystem;
@@ -809,14 +586,12 @@ Test Suite '${projectName}Tests' passed at 2023-05-30 10:15:32.145.
                         currentPath += '/' + part;
                     }
                     
-                    // Navigate to next part
                     if (i < pathParts.length - 1) {
                         if (!currentObj[part] || currentObj[part].type !== 'directory') {
                             return `cat: ${args}: No such file or directory`;
                         }
                         currentObj = currentObj[part].contents;
                     } else {
-                        // Last part - should be a file
                         if (!currentObj[part]) {
                             return `cat: ${args}: No such file or directory`;
                         } else if (currentObj[part].type === 'directory') {
@@ -831,11 +606,9 @@ Test Suite '${projectName}Tests' passed at 2023-05-30 10:15:32.145.
             }
         };
 
-        // Helper functions for file system simulation
+        // Helper functions
         function getFileSystemObject(path) {
             if (!path) return null;
-            
-            // Handle root path
             if (path === '/') {
                 return { type: 'directory', contents: fileSystem };
             }
@@ -890,34 +663,24 @@ Test Suite '${projectName}Tests' passed at 2023-05-30 10:15:32.145.
             return div.innerHTML;
         }
         
-        // Initialize the file system with some directories
-        createDirectory('/Users/user');
-        createDirectory('/Users/user/Developer');
-        createDirectory('/Applications');
-        
-        // Handle command execution
         function executeCommand(cmd) {
             const trimmedCmd = cmd.trim();
             if (!trimmedCmd) return;
             
-            // Add to history
             commandHistory.push(trimmedCmd);
             historyIndex = commandHistory.length;
             
             let result = '';
             let commandFound = false;
             
-            // Check exact command matches first
             if (commands[trimmedCmd]) {
                 result = commands[trimmedCmd]();
                 commandFound = true;
             } else {
-                // Parse command and arguments
                 const parts = trimmedCmd.split(' ');
                 const command = parts[0];
                 const args = parts.slice(1).join(' ');
                 
-                // Check if command exists
                 if (commands[command]) {
                     result = commands[command](args);
                     commandFound = true;
@@ -928,240 +691,213 @@ Test Suite '${projectName}Tests' passed at 2023-05-30 10:15:32.145.
                 result = `zsh: command not found: ${trimmedCmd.split(' ')[0]}`;
             }
             
-            // Special case for clear
             if (result === null) {
                 return;
-}
+            }
             
-            // Display result (add to output)
             if (result) {
                 addNewLine(result);
             }
-            // Keep old line
+            
             commandSpan.textContent = '';
             currentCommand = '';
-            }
+        }
         
-        // Add new line to output
         function addNewLine(text) {
             const div = document.createElement('div');
             div.className = 'output-line';
             div.innerHTML = text;
             output.appendChild(div);
-            
-            // Scroll to bottom
-            setTimeout(() => {
-                terminal.scrollTop = terminal.scrollHeight;
-            }, 0);
+            terminal.scrollTop = terminal.scrollHeight;
         }
         
-// Mobile keyboard support
-const mobileInput = document.getElementById('mobile-input');
-const keyboardToggle = document.getElementById('mobile-keyboard-toggle');
-let isVirtualKeyboardActive = false;
-let isMobileInputActive = false;
-
-// Detect mobile device
-const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-// Show keyboard toggle on mobile devices
-if (isMobile) {
-    keyboardToggle.style.display = 'block';
-    console.log('Mobile device detected, showing keyboard toggle'); // Debugging
-} else {
-    console.log('Non-mobile device, hiding keyboard toggle'); // Debugging
-}
-
-// Toggle virtual keyboard
-keyboardToggle.addEventListener('click', () => {
-    isVirtualKeyboardActive = !isVirtualKeyboardActive;
-    isMobileInputActive = isVirtualKeyboardActive;
-    if (isVirtualKeyboardActive) {
-        keyboardToggle.classList.add('active');
-        mobileInput.focus();
-        terminal.style.height = `${window.innerHeight - 300}px`; // Adjust for keyboard
-    } else {
-        keyboardToggle.classList.remove('active');
-        mobileInput.blur();
-        terminal.style.height = '100%';
-    }
-    terminal.scrollTop = terminal.scrollHeight;
-});
-
-// Handle mobile input (virtual keyboard)
-mobileInput.addEventListener('input', (e) => {
-    if (isMobileInputActive) {
-        currentCommand = e.target.value;
-        commandSpan.textContent = currentCommand;
-        terminal.scrollTop = terminal.scrollHeight;
-    }
-});
-
-// Handle mobile enter key (virtual keyboard)
-mobileInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && isMobileInputActive) {
-        executeCommand(currentCommand);
-        mobileInput.value = '';
-        currentCommand = '';
-        commandSpan.textContent = '';
-        terminal.scrollTop = terminal.scrollHeight;
-    }
-});
-
-// Handle touch events on terminal
-terminal.addEventListener('touchstart', (e) => {
-    if (isMobile && !isVirtualKeyboardActive) {
-        isVirtualKeyboardActive = true;
-        isMobileInputActive = true;
-        keyboardToggle.classList.add('active');
-        mobileInput.focus();
-        terminal.style.height = `${window.innerHeight - 300}px`;
-        terminal.scrollTop = terminal.scrollHeight;
-    }
-});
-
-// Adjust terminal height when virtual keyboard appears
-window.addEventListener('resize', () => {
-    if (isVirtualKeyboardActive && isMobile) {
-        const keyboardHeight = window.innerHeight < window.outerHeight ? window.outerHeight - window.innerHeight : 300;
-        terminal.style.height = `${window.innerHeight - keyboardHeight - 100}px`;
-        terminal.scrollTop = terminal.scrollHeight;
-    }
-});
-
-// Prevent default touch behaviors
-terminal.addEventListener('touchmove', (e) => {
-    if (isVirtualKeyboardActive) {
-        if (e.target === terminal) {
-            e.stopPropagation();
+        // Mobile keyboard support
+        const mobileInput = document.getElementById('mobile-input');
+        const keyboardToggle = document.getElementById('mobile-keyboard-toggle');
+        let isVirtualKeyboardActive = false;
+        let isMobileInputActive = false;
+        
+        const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+            keyboardToggle.style.display = 'block';
         }
-    }
-});
-
-// Sync mobile input with current command
-function syncMobileInput() {
-    if (isMobileInputActive) {
-        mobileInput.value = currentCommand;
-    }
-}
-
-// Modified keydown handler to support physical keyboards
-document.addEventListener('keydown', function(e) {
-    // On mobile, only skip keydown if virtual keyboard is active
-    if (isMobile && isMobileInputActive && e.target === mobileInput) {
-        return;
-    }
-
-    // Focus terminal on any key press
-    terminal.focus();
-
-    if (e.key === 'Enter') {
-        executeCommand(currentCommand);
-        if (isMobileInputActive) {
-            mobileInput.value = '';
+        
+        keyboardToggle.addEventListener('click', () => {
+            isVirtualKeyboardActive = !isVirtualKeyboardActive;
+            isMobileInputActive = isVirtualKeyboardActive;
+            if (isVirtualKeyboardActive) {
+                keyboardToggle.classList.add('active');
+                mobileInput.focus();
+                terminal.style.height = `${window.innerHeight - 300}px`;
+            } else {
+                keyboardToggle.classList.remove('active');
+                mobileInput.blur();
+                terminal.style.height = '100%';
+            }
+            terminal.scrollTop = terminal.scrollHeight;
+        });
+        
+        mobileInput.addEventListener('input', (e) => {
+            if (isMobileInputActive) {
+                currentCommand = e.target.value;
+                commandSpan.textContent = currentCommand;
+                terminal.scrollTop = terminal.scrollHeight;
+            }
+        });
+        
+        mobileInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && isMobileInputActive) {
+                e.preventDefault();
+                executeCommand(currentCommand);
+                mobileInput.value = '';
+                currentCommand = '';
+                commandSpan.textContent = '';
+                terminal.scrollTop = terminal.scrollHeight;
+            }
+        });
+        
+        terminal.addEventListener('touchstart', (e) => {
+            if (isMobile && !isVirtualKeyboardActive) {
+                isVirtualKeyboardActive = true;
+                isMobileInputActive = true;
+                keyboardToggle.classList.add('active');
+                mobileInput.focus();
+                terminal.style.height = `${window.innerHeight - 300}px`;
+                terminal.scrollTop = terminal.scrollHeight;
+            }
+        });
+        
+        window.addEventListener('resize', () => {
+            if (isVirtualKeyboardActive && isMobile) {
+                const keyboardHeight = window.innerHeight < window.outerHeight ? window.outerHeight - window.innerHeight : 300;
+                terminal.style.height = `${window.innerHeight - keyboardHeight - 100}px`;
+                terminal.scrollTop = terminal.scrollHeight;
+            }
+        });
+        
+        terminal.addEventListener('touchmove', (e) => {
+            if (isVirtualKeyboardActive && e.target === terminal) {
+                e.stopPropagation();
+            }
+        });
+        
+        function syncMobileInput() {
+            if (isMobileInputActive) {
+                mobileInput.value = currentCommand;
+            }
         }
-    } else if (e.key === 'Backspace') {
-        if (currentCommand.length > 0) {
-            currentCommand = currentCommand.slice(0, -1);
-            commandSpan.textContent = currentCommand;
-            syncMobileInput();
-        }
-    } else if (e.key === 'ArrowUp') {
-        if (historyIndex > 0) {
-            historyIndex--;
-            currentCommand = commandHistory[historyIndex];
-            commandSpan.textContent = currentCommand;
-            syncMobileInput();
-        }
-        e.preventDefault();
-    } else if (e.key === 'ArrowDown') {
-        if (historyIndex < commandHistory.length - 1) {
-            historyIndex++;
-            currentCommand = commandHistory[historyIndex];
-            commandSpan.textContent = currentCommand;
-        } else if (historyIndex === commandHistory.length - 1) {
-            historyIndex = commandHistory.length;
-            currentCommand = '';
-            commandSpan.textContent = '';
-        }
-        syncMobileInput();
-        e.preventDefault();
-    } else if (e.key === 'Tab') {
-        e.preventDefault();
-        if (currentCommand.length > 0) {
-            const commandParts = currentCommand.split(' ');
-            const lastPart = commandParts[commandParts.length - 1];
-            if (commandParts.length === 1) {
-                const possibleCommands = Object.keys(commands).filter(cmd => 
-                    cmd.startsWith(lastPart) && cmd !== lastPart
-                );
-                if (possibleCommands.length === 1) {
-                    currentCommand = possibleCommands[0];
+        
+        document.addEventListener('keydown', function(e) {
+            if (isMobile && isMobileInputActive && e.target === mobileInput) {
+                return;
+            }
+            
+            terminal.focus();
+            
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                executeCommand(currentCommand);
+                if (isMobileInputActive) {
+                    mobileInput.value = '';
+                }
+            } else if (e.key === 'Backspace') {
+                if (currentCommand.length > 0) {
+                    currentCommand = currentCommand.slice(0, -1);
                     commandSpan.textContent = currentCommand;
                     syncMobileInput();
                 }
-            } else if (currentCommand.startsWith('cd ') || currentCommand.startsWith('ls ')) {
-                const dirPart = lastPart;
-                const dirObj = getFileSystemObject(currentDirectory);
-                if (dirObj && dirObj.type === 'directory') {
-                    const possibleDirs = Object.keys(dirObj.contents).filter(dir => 
-                        dir.startsWith(dirPart) && dir !== dirPart
-                    );
-                    if (possibleDirs.length === 1) {
-                        commandParts[commandParts.length - 1] = possibleDirs[0];
-                        currentCommand = commandParts.join(' ');
-                        commandSpan.textContent = currentCommand;
-                        syncMobileInput();
+            } else if (e.key === 'ArrowUp') {
+                if (historyIndex > 0) {
+                    historyIndex--;
+                    currentCommand = commandHistory[historyIndex];
+                    commandSpan.textContent = currentCommand;
+                    syncMobileInput();
+                }
+                e.preventDefault();
+            } else if (e.key === 'ArrowDown') {
+                if (historyIndex < commandHistory.length - 1) {
+                    historyIndex++;
+                    currentCommand = commandHistory[historyIndex];
+                    commandSpan.textContent = currentCommand;
+                } else if (historyIndex === commandHistory.length - 1) {
+                    historyIndex = commandHistory.length;
+                    currentCommand = '';
+                    commandSpan.textContent = '';
+                }
+                syncMobileInput();
+                e.preventDefault();
+            } else if (e.key === 'Tab') {
+                e.preventDefault();
+                if (currentCommand.length > 0) {
+                    const commandParts = currentCommand.split(' ');
+                    const lastPart = commandParts[commandParts.length - 1];
+                    if (commandParts.length === 1) {
+                        const possibleCommands = Object.keys(commands).filter(cmd => 
+                            cmd.startsWith(lastPart) && cmd !== lastPart
+                        );
+                        if (possibleCommands.length === 1) {
+                            currentCommand = possibleCommands[0];
+                            commandSpan.textContent = currentCommand;
+                            syncMobileInput();
+                        }
+                    } else if (currentCommand.startsWith('cd ') || currentCommand.startsWith('ls ')) {
+                        const dirPart = lastPart;
+                        const dirObj = getFileSystemObject(currentDirectory);
+                        if (dirObj && dirObj.type === 'directory') {
+                            const possibleDirs = Object.keys(dirObj.contents).filter(dir => 
+                                dir.startsWith(dirPart) && dir !== dirPart
+                            );
+                            if (possibleDirs.length === 1) {
+                                commandParts[commandParts.length - 1] = possibleDirs[0];
+                                currentCommand = commandParts.join(' ');
+                                commandSpan.textContent = currentCommand;
+                                syncMobileInput();
+                            }
+                        }
                     }
                 }
+            } else if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) {
+                currentCommand += e.key;
+                commandSpan.textContent = currentCommand;
+                syncMobileInput();
             }
-        }
-    } else if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) {
-        currentCommand += e.key;
-        commandSpan.textContent = currentCommand;
-        syncMobileInput();
-    }
-
-    terminal.scrollTop = terminal.scrollHeight;
-});
-
-// Ensure terminal regains focus on touch
-terminal.addEventListener('touchend', () => {
-    if (isVirtualKeyboardActive) {
-        mobileInput.focus();
-    }
-});
-
-// Handle orientation change
-window.addEventListener('orientationchange', () => {
-    if (isVirtualKeyboardActive) {
-        setTimeout(() => {
-            terminal.style.height = `${window.innerHeight - 300}px`;
+            
             terminal.scrollTop = terminal.scrollHeight;
-        }, 100);
-    }
-});
-
-// Update window.onload to initialize mobile input
-window.onload = function() {
-    commands['cd']('~');
-    commands['mkdir']('Developer');
-    commands['cd']('Developer');
-
-    const cursor = document.getElementById('cursor');
-    cursor.style.animation = 'blink 1s infinite';
-
-    // Initialize mobile input
-    if (isMobile) {
-        mobileInput.value = '';
-        keyboardToggle.style.display = 'block'; // Ensure button is visible
-    }
-
-    terminal.focus();
-};
+        });
+        
+        terminal.addEventListener('touchend', () => {
+            if (isVirtualKeyboardActive) {
+                mobileInput.focus();
+            }
+        });
+        
+        window.addEventListener('orientationchange', () => {
+            if (isVirtualKeyboardActive) {
+                setTimeout(() => {
+                    terminal.style.height = `${window.innerHeight - 300}px`;
+                    terminal.scrollTop = terminal.scrollHeight;
+                }, 100);
+            }
+        });
+        
+        window.onload = function() {
+            commands['cd']('~');
+            commands['mkdir']('Developer');
+            commands['cd']('Developer');
+            
+            const cursor = document.getElementById('cursor');
+            cursor.style.animation = 'blink 1s infinite';
+            
+            if (isMobile) {
+                mobileInput.value = '';
+                keyboardToggle.style.display = 'block';
+            }
+            
+            terminal.focus();
+        };
     </script>
-
-<script src="https://cdn.jsdelivr.net/gh/voxxdevv/lmdesigns-watermark@main/watermarkme.min.js"></script> 
     
+    <script src="https://cdn.jsdelivr.net/gh/voxxdevv/lmdesigns-watermark@main/watermarkme.min.js"></script>
 </body>
 </html>
