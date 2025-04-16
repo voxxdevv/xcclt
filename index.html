@@ -45,6 +45,8 @@
 	    animation: fadeIn 1s ease-in-out; 
 	    position: relative;
             outline: none;
+	    width: 100vh;
+	    height: calc(100vh - 40px); /* adjust based on your sticky bar height */
         }
         
         .command-line {
@@ -60,7 +62,7 @@
 </head>
 <body style="margin: 0; padding: 0; font-family: 'Menlo', 'Monaco', monospace; background-color: #000000; color: #FFFFFF;">
 	    	<div style="z-index: 10000; position: sticky;margin: 0 auto; margin-bottom: 10px; width: 100%; background-color: #ffffff; color: #000000; top: 0px; padding: 10px;">$ <span class="command-span"></span><span id="cursor" class="cursor"></span></div>
-    <div id="terminal" style="margin-top: 0; width: 100vh; height: 100vh; padding: 10px; padding-top: 0px; box-sizing: border-box;">
+    <div id="terminal" style="margin-top: 0; padding: 10px; padding-top: 0px; box-sizing: border-box;">
         <div id="output">
             <div style="color: #7F7F7F;">xcrun: <i class="fa-solid fa-terminal"></i> Xcode Web Command Line Tools (CLT)</div>
             <div style="color: #7F7F7F;">Apple, Xcode, and other trademarks are trademarks of Apple Inc., registered in the U.S. and other countries. This project is not affiliated with or endorsed by Apple. Copyright (c) 2025 Loud Monkey Designs. All rights reserved.</div>
