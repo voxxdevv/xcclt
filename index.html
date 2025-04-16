@@ -40,6 +40,7 @@
         #terminal {
             line-height: 1.3;
 	    animation: fadeIn 1.25s ease-in-out; 
+	    position: relative;
         }
         
         .command-line {
@@ -61,7 +62,7 @@
             <div style="color: #7F7F7F;">xcrun version 64 (64).</div>
             <div style="color: #7F7F7F;">Type 'help' for a list of commands.</div>
         </div>
-	<div style="margin-top: 10px">$ <span class="command-span"></span><span id="cursor" class="cursor">_</span></div>
+	<div style="margin-top: 10px; position: absolute; bottom: 0px;">$ <span class="command-span"></span><span id="cursor" class="cursor">_</span></div>
     </div>
 
     <script>
