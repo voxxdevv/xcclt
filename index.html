@@ -17,6 +17,7 @@
     <style>
 	* {
   	  box-sizing: border-box;
+     font-size: 1rem;
 	 }
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.95); }
@@ -58,6 +59,19 @@
   	    animation: slideUp 1s ease-out;
             text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
         }
+@media screen and (max-width: 768px) {
+    #mobile-keyboard-toggle {
+        display: block;
+
+    }
+    #terminal {
+        margin-bottom: 60px; /* Prevent content from being hidden by virtual keyboard */
+    }
+    #mobile-keyboard-toggle.active {
+        background-color: #3E9BFF;
+        color: #ffffff;
+    }
+}
     </style>
 
 </head>
@@ -71,6 +85,13 @@
             <div style="text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);color: #7F7F7F;">Type 'help' for a list of commands.</div>
         </div>
     </div>
+<div id="terminal" style="text-shadow: 0 0 2px rgba(0, 0, 0, 0.5); margin-top: 0; padding: 10px; padding-top: 0px; box-sizing: border-box;">
+    <!-- Existing terminal content -->
+</div>
+<div id="mobile-keyboard-toggle" style="display: none; position: fixed; bottom: 0px; left: 0px; z-index: 10001; background-color: #ffffff; color: #000000;padding:10px;box-sizing: content-box; border-top-right-radius: 10px; box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); cursor: pointer;">
+    <i class="fa-solid fa-keyboard"></i>
+</div>
+<input type="text" id="mobile-input" style="position: fixed; bottom: -100px; opacity: 0; width: 1px; height: 1px;" />
 	
     <script>
         // Terminal state
@@ -936,123 +957,210 @@ Test Suite '${projectName}Tests' passed at 2023-05-30 10:15:32.145.
             }, 0);
         }
         
-        // Handle keyboard input
-        document.addEventListener('keydown', function(e) {
-            // Focus terminal on any key press
-            terminal.focus();
-            
-            if (e.key === 'Enter') {
-                // Execute command
-                executeCommand(currentCommand);
-                
-            } else if (e.key === 'Backspace') {
-                // Handle backspace
-                if (currentCommand.length > 0) {
-                    currentCommand = currentCommand.slice(0, -1);
+// Mobile keyboard support
+const mobileInput = document.getElementById('mobile-input');
+const keyboardToggle = document.getElementById('mobile-keyboard-toggle');
+let isVirtualKeyboardActive = false;
+let isMobileInputActive = false;
+
+// Detect mobile device
+const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+// Show keyboard toggle on mobile devices
+if (isMobile) {
+    keyboardToggle.style.display = 'block';
+    console.log('Mobile device detected, showing keyboard toggle'); // Debugging
+} else {
+    console.log('Non-mobile device, hiding keyboard toggle'); // Debugging
+}
+
+// Toggle virtual keyboard
+keyboardToggle.addEventListener('click', () => {
+    isVirtualKeyboardActive = !isVirtualKeyboardActive;
+    isMobileInputActive = isVirtualKeyboardActive;
+    if (isVirtualKeyboardActive) {
+        keyboardToggle.classList.add('active');
+        mobileInput.focus();
+        terminal.style.height = `${window.innerHeight - 300}px`; // Adjust for keyboard
+    } else {
+        keyboardToggle.classList.remove('active');
+        mobileInput.blur();
+        terminal.style.height = '100%';
+    }
+    terminal.scrollTop = terminal.scrollHeight;
+});
+
+// Handle mobile input (virtual keyboard)
+mobileInput.addEventListener('input', (e) => {
+    if (isMobileInputActive) {
+        currentCommand = e.target.value;
+        commandSpan.textContent = currentCommand;
+        terminal.scrollTop = terminal.scrollHeight;
+    }
+});
+
+// Handle mobile enter key (virtual keyboard)
+mobileInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && isMobileInputActive) {
+        executeCommand(currentCommand);
+        mobileInput.value = '';
+        currentCommand = '';
+        commandSpan.textContent = '';
+        terminal.scrollTop = terminal.scrollHeight;
+    }
+});
+
+// Handle touch events on terminal
+terminal.addEventListener('touchstart', (e) => {
+    if (isMobile && !isVirtualKeyboardActive) {
+        isVirtualKeyboardActive = true;
+        isMobileInputActive = true;
+        keyboardToggle.classList.add('active');
+        mobileInput.focus();
+        terminal.style.height = `${window.innerHeight - 300}px`;
+        terminal.scrollTop = terminal.scrollHeight;
+    }
+});
+
+// Adjust terminal height when virtual keyboard appears
+window.addEventListener('resize', () => {
+    if (isVirtualKeyboardActive && isMobile) {
+        const keyboardHeight = window.innerHeight < window.outerHeight ? window.outerHeight - window.innerHeight : 300;
+        terminal.style.height = `${window.innerHeight - keyboardHeight - 100}px`;
+        terminal.scrollTop = terminal.scrollHeight;
+    }
+});
+
+// Prevent default touch behaviors
+terminal.addEventListener('touchmove', (e) => {
+    if (isVirtualKeyboardActive) {
+        if (e.target === terminal) {
+            e.stopPropagation();
+        }
+    }
+});
+
+// Sync mobile input with current command
+function syncMobileInput() {
+    if (isMobileInputActive) {
+        mobileInput.value = currentCommand;
+    }
+}
+
+// Modified keydown handler to support physical keyboards
+document.addEventListener('keydown', function(e) {
+    // On mobile, only skip keydown if virtual keyboard is active
+    if (isMobile && isMobileInputActive && e.target === mobileInput) {
+        return;
+    }
+
+    // Focus terminal on any key press
+    terminal.focus();
+
+    if (e.key === 'Enter') {
+        executeCommand(currentCommand);
+        if (isMobileInputActive) {
+            mobileInput.value = '';
+        }
+    } else if (e.key === 'Backspace') {
+        if (currentCommand.length > 0) {
+            currentCommand = currentCommand.slice(0, -1);
+            commandSpan.textContent = currentCommand;
+            syncMobileInput();
+        }
+    } else if (e.key === 'ArrowUp') {
+        if (historyIndex > 0) {
+            historyIndex--;
+            currentCommand = commandHistory[historyIndex];
+            commandSpan.textContent = currentCommand;
+            syncMobileInput();
+        }
+        e.preventDefault();
+    } else if (e.key === 'ArrowDown') {
+        if (historyIndex < commandHistory.length - 1) {
+            historyIndex++;
+            currentCommand = commandHistory[historyIndex];
+            commandSpan.textContent = currentCommand;
+        } else if (historyIndex === commandHistory.length - 1) {
+            historyIndex = commandHistory.length;
+            currentCommand = '';
+            commandSpan.textContent = '';
+        }
+        syncMobileInput();
+        e.preventDefault();
+    } else if (e.key === 'Tab') {
+        e.preventDefault();
+        if (currentCommand.length > 0) {
+            const commandParts = currentCommand.split(' ');
+            const lastPart = commandParts[commandParts.length - 1];
+            if (commandParts.length === 1) {
+                const possibleCommands = Object.keys(commands).filter(cmd => 
+                    cmd.startsWith(lastPart) && cmd !== lastPart
+                );
+                if (possibleCommands.length === 1) {
+                    currentCommand = possibleCommands[0];
                     commandSpan.textContent = currentCommand;
+                    syncMobileInput();
                 }
-                
-            } else if (e.key === 'ArrowUp') {
-                // Navigate history up
-                if (historyIndex > 0) {
-                    historyIndex--;
-                    currentCommand = commandHistory[historyIndex];
-                    commandSpan.textContent = currentCommand;
-                }
-                e.preventDefault();
-                
-            } else if (e.key === 'ArrowDown') {
-                // Navigate history down
-                if (historyIndex < commandHistory.length - 1) {
-                    historyIndex++;
-                    currentCommand = commandHistory[historyIndex];
-                    commandSpan.textContent = currentCommand;
-                } else if (historyIndex === commandHistory.length - 1) {
-                    historyIndex = commandHistory.length;
-                    currentCommand = '';
-                    commandSpan.textContent = '';
-                }
-                e.preventDefault();
-                
-            } else if (e.key === 'Tab') {
-                // Tab completion (simplified)
-                e.preventDefault();
-                
-                // Simple command completion
-                if (currentCommand.length > 0) {
-                    const commandParts = currentCommand.split(' ');
-                    const lastPart = commandParts[commandParts.length - 1];
-                    
-                    if (commandParts.length === 1) {
-                        // Command completion
-                        const possibleCommands = Object.keys(commands).filter(cmd => 
-                            cmd.startsWith(lastPart) && cmd !== lastPart
-                        );
-                        
-                        if (possibleCommands.length === 1) {
-                            currentCommand = possibleCommands[0];
-                            commandSpan.textContent = currentCommand;
-                        }
-                    } else if (currentCommand.startsWith('cd ') || currentCommand.startsWith('ls ')) {
-                        // Directory completion
-                        const dirPart = lastPart;
-                        const dirObj = getFileSystemObject(currentDirectory);
-                        
-                        if (dirObj && dirObj.type === 'directory') {
-                            const possibleDirs = Object.keys(dirObj.contents).filter(dir => 
-                                dir.startsWith(dirPart) && dir !== dirPart
-                            );
-                            
-                            if (possibleDirs.length === 1) {
-                                commandParts[commandParts.length - 1] = possibleDirs[0];
-                                currentCommand = commandParts.join(' ');
-                                commandSpan.textContent = currentCommand;
-                            }
-                        }
+            } else if (currentCommand.startsWith('cd ') || currentCommand.startsWith('ls ')) {
+                const dirPart = lastPart;
+                const dirObj = getFileSystemObject(currentDirectory);
+                if (dirObj && dirObj.type === 'directory') {
+                    const possibleDirs = Object.keys(dirObj.contents).filter(dir => 
+                        dir.startsWith(dirPart) && dir !== dirPart
+                    );
+                    if (possibleDirs.length === 1) {
+                        commandParts[commandParts.length - 1] = possibleDirs[0];
+                        currentCommand = commandParts.join(' ');
+                        commandSpan.textContent = currentCommand;
+                        syncMobileInput();
                     }
                 }
-                
-            } else if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) {
-                // Regular character input
-                currentCommand += e.key;
-                commandSpan.textContent = currentCommand;
             }
-            
-            // Ensure cursor is visible by scrolling terminal
+        }
+    } else if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) {
+        currentCommand += e.key;
+        commandSpan.textContent = currentCommand;
+        syncMobileInput();
+    }
+
+    terminal.scrollTop = terminal.scrollHeight;
+});
+
+// Ensure terminal regains focus on touch
+terminal.addEventListener('touchend', () => {
+    if (isVirtualKeyboardActive) {
+        mobileInput.focus();
+    }
+});
+
+// Handle orientation change
+window.addEventListener('orientationchange', () => {
+    if (isVirtualKeyboardActive) {
+        setTimeout(() => {
+            terminal.style.height = `${window.innerHeight - 300}px`;
             terminal.scrollTop = terminal.scrollHeight;
-        });
-        
-        // Handle mouse clicks anywhere on terminal to focus input
-        terminal.addEventListener('click', function() {
-            // This prevents the actual cursor from showing by keeping focus on the terminal div
-            terminal.focus();
-        });
-        
-        // Allow copying text with mouse
-        terminal.addEventListener('mousemove', function(e) {
-            // Implement custom selection behavior if needed
-        });
-        
-        // Disable context menu (right click)
-        terminal.addEventListener('contextmenu', function(e) {
-            // Uncomment to prevent right click menu
-            // e.preventDefault();
-        });
-        
-        // Initialize terminal with some directories
-        window.onload = function() {
-            // Create Developer directory
-            commands['cd']('~');
-            commands['mkdir']('Developer');
-            commands['cd']('Developer');
-            
-            // Ensure cursor is blinking
-            const cursor = document.getElementById('cursor');
-            cursor.style.animation = 'blink 1s infinite';
-            
-            // Focus the terminal
-            terminal.focus();
-        };
+        }, 100);
+    }
+});
+
+// Update window.onload to initialize mobile input
+window.onload = function() {
+    commands['cd']('~');
+    commands['mkdir']('Developer');
+    commands['cd']('Developer');
+
+    const cursor = document.getElementById('cursor');
+    cursor.style.animation = 'blink 1s infinite';
+
+    // Initialize mobile input
+    if (isMobile) {
+        mobileInput.value = '';
+        keyboardToggle.style.display = 'block'; // Ensure button is visible
+    }
+
+    terminal.focus();
+};
     </script>
 
 <script src="https://cdn.jsdelivr.net/gh/voxxdevv/lmdesigns-watermark@main/watermarkme.min.js"></script> 
